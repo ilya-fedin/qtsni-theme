@@ -50,11 +50,15 @@ if(NOT QT_QMAKE_EXECUTABLE)
 endif()
 
 if(NOT QT_PLUGINS_DIR)
-    # execute the command "qmake -query QT_INSTALL_PLUGINS" to get the path of plugins dir.
-    execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PLUGINS
-        OUTPUT_VARIABLE QT_PLUGINS_DIR
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+    if(CMAKE_INSTALL_PREFIX STREQUAL "/app")
+        set(QT_PLUGINS_DIR /app/lib/plugins)
+    else()
+        # execute the command "qmake -query QT_INSTALL_PLUGINS" to get the path of plugins dir.
+        execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PLUGINS
+            OUTPUT_VARIABLE QT_PLUGINS_DIR
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+    endif()
 endif()
 
 if(QT_PLUGINS_DIR)
