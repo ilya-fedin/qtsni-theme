@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QDBusMetaType>
 #include <QDBusInterface>
+#include <QDBusConnection>
 #include <QDBusConnectionInterface>
 
 static bool isIndicatorApplication() {
