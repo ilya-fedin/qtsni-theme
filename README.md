@@ -17,5 +17,5 @@ To build run `make`, to install `make install` which accepts variable `DESTDIR` 
 
 ## Configuration, Usage
 
-To use the plugin in a flatpak package, just set `--env=QT_QPA_PLATFORMTHEME=qtsni` in `finish-args`. Then this package will get a working tray icon for a Qt5 program.   
+To use the plugin in a flatpak package, just set `--env=QT_QPA_PLATFORMTHEME=qtsni` and `--talk-name=org.kde.StatusNotifierWatcher` in `finish-args`. After that this package will get a working tray icon for a Qt5 program. You may also want to support Ubuntu's indicator-application-service, then you need `--talk-name=com.canonical.indicator.application` and `--talk-name=org.ayatana.indicator.application` permissions.   
 If, for some unknown reasons, the plugin is not loaded, we can debug the plugin by exporting `QT_DEBUG_PLUGINS=1`. Then, Qt5 will print detailed information and error messages about all plugins in the console when running any Qt5 programs.
