@@ -6,6 +6,7 @@ include_directories(
 set(qtsni_HDRS
     qtsnitheme.h
     qtsnisystemtrayicon.h
+    flatpakutils.h
     statusnotifieritem/statusnotifieritem.h
     statusnotifieritem/dbustypes.h
 )

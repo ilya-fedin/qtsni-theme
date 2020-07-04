@@ -5,15 +5,15 @@
 #include <qpa/qplatformthemefactory_p.h>
 #include <qpa/qplatformintegration.h>
 
-#include <QStandardPaths>
 #include "qtsnisystemtrayicon.h"
+#include "flatpakutils.h"
 
 QT_BEGIN_NAMESPACE
 
 static bool checkNeedPortalSupport()
 {
 #if QT_CONFIG(dbus)
-    return !QStandardPaths::locate(QStandardPaths::RuntimeLocation, QLatin1String("flatpak-info")).isEmpty() || qEnvironmentVariableIsSet("SNAP");
+    return QtSNI::FlatpakUtils::inFlatpak() || qEnvironmentVariableIsSet("SNAP");
 #else
     return false;
 #endif // QT_CONFIG(dbus)

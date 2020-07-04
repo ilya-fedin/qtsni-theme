@@ -1,4 +1,5 @@
 #include "qtsnisystemtrayicon.h"
+#include "flatpakutils.h"
 #include <QStandardPaths>
 #include <QDir>
 #include <QAction>
@@ -35,8 +36,17 @@ static bool isIndicatorApplication() {
 static QString iconTempPath()
 {
     QString tempPath = QStandardPaths::writableLocation(QStandardPaths::RuntimeLocation);
-    if (!tempPath.isEmpty())
-        return tempPath;
+    if (!tempPath.isEmpty()) {
+        if (QtSNI::FlatpakUtils::inFlatpak()) {
+            const auto flatpakId = QtSNI::FlatpakUtils::flatpakId();
+            if (!flatpakId.isEmpty()) {
+                tempPath += "/app/" + flatpakId;
+                return tempPath;
+            }
+        } else {
+            return tempPath;
+        }
+    }
 
     tempPath = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation);
 
