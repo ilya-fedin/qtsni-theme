@@ -48,11 +48,14 @@ if(NOT QT_QMAKE_EXECUTABLE)
     message(FATAL_ERROR "qmake is not found.")
 endif()
 
-# execute the command "qmake -query QT_INSTALL_PLUGINS" to get the path of plugins dir.
-execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PLUGINS
-    OUTPUT_VARIABLE QT_PLUGINS_DIR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+if(NOT QT_PLUGINS_DIR)
+    # execute the command "qmake -query QT_INSTALL_PLUGINS" to get the path of plugins dir.
+    execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PLUGINS
+        OUTPUT_VARIABLE QT_PLUGINS_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+endif()
+
 if(QT_PLUGINS_DIR)
     message(STATUS "Qt5 plugin directory:" "${QT_PLUGINS_DIR}")
 else()
