@@ -357,7 +357,7 @@ void QtSNISystemTrayIcon::init()
 {
     if (!mSni)
     {
-        mSni = new StatusNotifierItem(QString::number(QCoreApplication::applicationPid()), this);
+        mSni = new StatusNotifierItem(QCoreApplication::applicationName(), this);
         mSni->setTitle(QApplication::applicationDisplayName());
 
         // default menu
