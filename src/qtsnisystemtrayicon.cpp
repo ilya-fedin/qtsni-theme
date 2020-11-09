@@ -75,8 +75,7 @@ static inline QString tempFileTemplate()
 static std::unique_ptr<QTemporaryFile> tempIcon(
         const QIcon &icon,
         QObject *parent) {
-    qreal dpr = qGuiApp->devicePixelRatio();
-    const auto desiredSize = QSize(22 * dpr, 22 * dpr);
+    static const auto desiredSize = QSize(22, 22);
 
     auto ret = std::make_unique<QTemporaryFile>(
         tempFileTemplate(),
@@ -96,10 +95,11 @@ static std::unique_ptr<QTemporaryFile> tempIcon(
                 return a.width() < b.width();
             });
 
-        icon
-            .pixmap(*biggestSize)
+		const auto iconPixmap = icon.pixmap(*biggestSize);
+
+        iconPixmap
             .scaled(
-                desiredSize,
+                desiredSize * iconPixmap.devicePixelRatio(),
                 Qt::IgnoreAspectRatio,
                 Qt::SmoothTransformation)
             .save(ret.get());
