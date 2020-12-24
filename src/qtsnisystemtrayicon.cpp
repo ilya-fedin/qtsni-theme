@@ -75,7 +75,22 @@ static inline QString tempFileTemplate()
 static std::unique_ptr<QTemporaryFile> tempIcon(
         const QIcon &icon,
         QObject *parent) {
+    static const auto dprSize = [](const QPixmap &pixmap) {
+        return pixmap.size() / pixmap.devicePixelRatio();
+    };
+
     static const auto desiredSize = QSize(22, 22);
+
+    static const auto scalePixmap = [=](const QPixmap &pixmap) {
+        if (dprSize(pixmap) != desiredSize) {
+            return pixmap.scaled(
+                desiredSize * pixmap.devicePixelRatio(),
+                Qt::IgnoreAspectRatio,
+                Qt::SmoothTransformation);
+        } else {
+            return pixmap;
+        }
+    };
 
     auto ret = std::make_unique<QTemporaryFile>(
         tempFileTemplate(),
@@ -83,9 +98,10 @@ static std::unique_ptr<QTemporaryFile> tempIcon(
 
     ret->open();
 
-    if (icon.actualSize(desiredSize) == desiredSize) {
-        icon.pixmap(desiredSize).save(ret.get());
-    } else {
+    const auto firstAttempt = icon.pixmap(desiredSize);
+    const auto firstAttemptSize = dprSize(firstAttempt);
+
+    if (firstAttemptSize.width() < desiredSize.width()) {
         const auto availableSizes = icon.availableSizes();
 
         const auto biggestSize = std::max_element(
@@ -95,14 +111,13 @@ static std::unique_ptr<QTemporaryFile> tempIcon(
                 return a.width() < b.width();
             });
 
-		const auto iconPixmap = icon.pixmap(*biggestSize);
-
-        iconPixmap
-            .scaled(
-                desiredSize * iconPixmap.devicePixelRatio(),
-                Qt::IgnoreAspectRatio,
-                Qt::SmoothTransformation)
-            .save(ret.get());
+        if ((*biggestSize).width() > firstAttemptSize.width()) {
+            scalePixmap(icon.pixmap(*biggestSize)).save(ret.get());
+        } else {
+            scalePixmap(firstAttempt).save(ret.get());
+        }
+    } else {
+        scalePixmap(firstAttempt).save(ret.get());
     }
 
     ret->close();
