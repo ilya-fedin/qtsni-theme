@@ -7,6 +7,7 @@
 #include <QMenu>
 #include <QRect>
 #include <QApplication>
+#include <QTemporaryFile>
 #include <QDBusMetaType>
 #include <QDBusInterface>
 #include <QDBusConnection>

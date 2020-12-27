@@ -4,13 +4,13 @@
 
 #include <qpa/qplatformmenu.h>
 #include <qpa/qplatformsystemtrayicon.h>
-#include <QTemporaryFile>
 
 #include "statusnotifieritem/statusnotifieritem.h"
 
 class SystemTrayMenuItem;
 class QAction;
 class QMenu;
+class QTemporaryFile;
 
 class SystemTrayMenu : public QPlatformMenu
 {
@@ -94,5 +94,5 @@ public:
 
 private:
     StatusNotifierItem *mSni;
-    std::unique_ptr<QTemporaryFile> mTempIcon = nullptr;
+    std::unique_ptr<QTemporaryFile> mTempIcon;
 };
