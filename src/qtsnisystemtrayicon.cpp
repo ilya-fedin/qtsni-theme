@@ -112,7 +112,7 @@ static std::unique_ptr<QTemporaryFile> tempIcon(
                 return a.width() < b.width();
             });
 
-        if ((*biggestSize).width() > firstAttemptSize.width()) {
+        if (biggestSize->width() > firstAttemptSize.width()) {
             scalePixmap(icon.pixmap(*biggestSize)).save(ret.get());
         } else {
             scalePixmap(firstAttempt).save(ret.get());
